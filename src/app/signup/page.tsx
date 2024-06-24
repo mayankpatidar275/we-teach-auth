@@ -13,7 +13,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Link from "next/link";
 import { User } from "@/models/userModel";
-import { hash } from "bcrypt";
+// import { hash } from "bcrypt"; // causing issues
 import { redirect } from "next/navigation";
 import { connectToDatabase } from "@/lib/utils";
 
@@ -33,7 +33,8 @@ const SignupPage = () => {
     const user = await User.findOne({ email });
     if (user) throw Error("User already exists");
 
-    const hashedPassword = await hash(password, 10);
+    const bcrypt = require("bcrypt");
+    const hashedPassword = await bcrypt.hash(password, 10);
 
     await User.create({ name, email, hashedPassword });
 

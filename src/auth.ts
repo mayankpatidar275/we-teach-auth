@@ -1,8 +1,9 @@
-import NextAuth, { CredentialsSignin } from "next-auth";
+import NextAuth, { AuthError, CredentialsSignin } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import CredentialProvider from "next-auth/providers/credentials";
 import { User } from "./models/userModel";
-import bcrypt from "bcrypt";
+import { connectToDatabase } from "./lib/utils";
+// import { compare } from "bcrypt"; // causing issues
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
@@ -24,8 +25,11 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           throw new CredentialsSignin("Please provide both email and password");
 
         //connection to db
+        await connectToDatabase();
 
         const user = await User.findOne({ email }).select("+password");
+
+        console.log("user: ", user);
 
         if (!user) {
           throw new CredentialsSignin("Invailid email or password");
@@ -35,11 +39,12 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           throw new CredentialsSignin("Invailid email or password");
         }
 
-        // const isPasswordCorrect = await  bcrypt.compare(password, user.password);
+        const bcrypt = require("bcrypt");
+        const isPasswordCorrect = await bcrypt.compare(password, user.password);
 
-        // if (!isPasswordCorrect) {
-        //   throw new CredentialsSignin("Invailid email or password");
-        // }
+        if (!isPasswordCorrect) {
+          throw new CredentialsSignin("Invailid email or password");
+        }
 
         // Todo: add more complexity like verified (send email to verify)
 
@@ -47,4 +52,23 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       },
     }),
   ],
+  pages: { signIn: "/login" },
+  callbacks: {
+    signIn: async ({ user, account }) => {
+      if (account?.provider === "google") {
+        try {
+          const { email, name, image, id } = user;
+          await connectToDatabase();
+          const alreadyUser = await User.findOne({ email });
+          if (!alreadyUser)
+            await User.create({ email, name, image, googleId: id });
+          return true;
+        } catch (error) {
+          throw new AuthError("Error while creating user");
+        }
+      }
+      if (account?.provider === "credentials") return true;
+      return false;
+    },
+  },
 });
