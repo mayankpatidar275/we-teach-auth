@@ -8,13 +8,13 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { LoginForm } from "@/components/ui/client/form";
+import { LoginForm } from "@/components/ui/client/LoginForm";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
 const LoginPage = async () => {
-  const session = await auth();
-  if (session?.user) redirect("/");
+  // const session = await auth();
+  // if (session?.user) redirect("/");
 
   return (
     <div className="flex justify-center items-center h-dvh">

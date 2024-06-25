@@ -10,6 +10,7 @@ const credentialsLogin = async (email: string, password: string) => {
       password,
     });
   } catch (error) {
+    console.log("error in login is: ", error);
     const err = error as CredentialsSignin;
     return err.message;
   }
