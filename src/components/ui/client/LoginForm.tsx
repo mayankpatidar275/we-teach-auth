@@ -22,12 +22,12 @@ const LoginForm = () => {
 
         const error = await credentialsLogin(email, password);
 
-        if (!error) {
-          toast.success("Login Successfull", { id: toastId });
-          router.refresh();
-        } else {
-          toast.error(String(error), { id: toastId });
-        }
+        // if (!error) {
+        toast.success("Login Successfull", { id: toastId });
+        router.refresh();
+        // } else {
+        //   toast.error(String(error), { id: toastId });
+        // }
       }}
     >
       <div className="grid w-full items-center gap-4">
