@@ -33,7 +33,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
         const user = await User.findOne({ email }).select("+password");
 
-        console.log("user: ", user);
+        // console.log("user: ", user);
 
         if (!user) {
           // throw new CredentialsSignin("Invailid email or password");
@@ -62,8 +62,17 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       },
     }),
   ],
+  session: { strategy: "jwt" },
   pages: { signIn: "/login" },
+  secret: process.env.AUTH_SECRET,
   callbacks: {
+    // async jwt({ token, user }) {
+    //   if (user) {
+    //     token.name = user.name;
+    //     token.email = user.email;
+    //   }
+    //   return token;
+    // },
     // signIn: async ({ user, account }) => {
     //   if (account?.provider === "google") {
     //     try {

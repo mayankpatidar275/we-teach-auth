@@ -23,7 +23,7 @@ const credentialsSignup = async (
     await User.create({ name, email, password: hashedPassword });
     // redirect("/login");      // redirect can not be use in try catch because it internally throws an error
   } catch (error) {
-    console.log("Something went wrong:", error);
+    // console.log("Something went wrong:", error);
     throw Error("Something went wrong");
   }
 };

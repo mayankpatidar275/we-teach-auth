@@ -1,21 +1,9 @@
-import { auth } from "@/auth";
-import { decode } from "next-auth/jwt";
-import { cookies } from "next/headers";
+// import { auth } from "@/auth";
+import { sessionUserId } from "@/actions/get-userId";
 
 export default async function Home() {
-  const session = await auth();
-  const user = session?.user;
-
-  const cookess = cookies().get("authjs.session-token");
-  // console.log(cookess);
-  // console.log(cookess?.value);
-  // console.log(
-  //   await decode({
-  //     token: cookess?.value!,
-  //     salt: cookess?.name!,
-  //     secret: process.env.AUTH_SECRET!,
-  //   })
-  // );
+  const userId = await sessionUserId();
+  console.log("userId: ", userId);
 
   return <div></div>;
 }

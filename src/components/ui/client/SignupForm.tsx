@@ -4,7 +4,7 @@ import { toast } from "sonner";
 import { Button } from "../button";
 import { Input } from "../input";
 import { Label } from "../label";
-import { redirect, useRouter } from "next/navigation";
+import { redirect } from "next/navigation";
 import { credentialsSignup } from "@/actions/signup";
 
 const SignupForm = () => {

@@ -24,8 +24,8 @@ const LoginForm = () => {
         console.log("response of credentials login:", error);
 
         // if (!error) {
-        //   toast.success("Login Successfull", { id: toastId });
-        //   router.refresh();
+        toast.success("Login Successfull", { id: toastId });
+        router.refresh();
         // } else {
         //   toast.error(String(error), { id: toastId });
         // }
