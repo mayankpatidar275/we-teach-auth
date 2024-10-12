@@ -26,7 +26,7 @@ const SignupForm = () => {
           return toast.error(String(error), { id: toastId });
         }
 
-        toast.success("Login Successfull", { id: toastId });
+        toast.success("Signup Successfull", { id: toastId });
         redirect("/login");
       }}
     >

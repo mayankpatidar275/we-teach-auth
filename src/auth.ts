@@ -22,7 +22,11 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         const password = credentials.password as string | undefined;
 
         if (!email || !password)
-          throw new CredentialsSignin("Please provide both email and password");
+          // throw new CredentialsSignin("Please provide both email and password");
+        {
+          console.log("Please provide both email and password");
+        return {error: "Please provide both email and password"}
+      }
 
         //connection to db
         await connectToDatabase();
@@ -32,18 +36,24 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         console.log("user: ", user);
 
         if (!user) {
-          throw new CredentialsSignin("Invailid email or password");
+          // throw new CredentialsSignin("Invailid email or password");
+          return {error: "Invailid email or password"}
+          // return null
         }
 
         if (!user.password) {
-          throw new CredentialsSignin("Invailid email or password");
+          // throw new CredentialsSignin("Invailid email or password");
+          return {error: "Invailid email or password"}
+          // return null
         }
 
         const bcrypt = require("bcrypt");
         const isPasswordCorrect = await bcrypt.compare(password, user.password);
 
         if (!isPasswordCorrect) {
-          throw new CredentialsSignin("Invailid email or password");
+          // throw new CredentialsSignin("Invailid email or password");
+          // return null
+          return {error: "Invailid email or password"}
         }
 
         // Todo: add more complexity like verified (send email to verify)
@@ -54,21 +64,21 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   ],
   pages: { signIn: "/login" },
   callbacks: {
-    signIn: async ({ user, account }) => {
-      if (account?.provider === "google") {
-        try {
-          const { email, name, image, id } = user;
-          await connectToDatabase();
-          const alreadyUser = await User.findOne({ email });
-          if (!alreadyUser)
-            await User.create({ email, name, image, googleId: id });
-          return true;
-        } catch (error) {
-          throw new AuthError("Error while creating user");
-        }
-      }
-      if (account?.provider === "credentials") return true;
-      return false;
-    },
+    // signIn: async ({ user, account }) => {
+    //   if (account?.provider === "google") {
+    //     try {
+    //       const { email, name, image, id } = user;
+    //       await connectToDatabase();
+    //       const alreadyUser = await User.findOne({ email });
+    //       if (!alreadyUser)
+    //         await User.create({ email, name, image, googleId: id });
+    //       return true;
+    //     } catch (error) {
+    //       throw new AuthError("Error while creating user");
+    //     }
+    //   }
+    //   if (account?.provider === "credentials") return true;
+    //   return false;
+    // },
   },
 });

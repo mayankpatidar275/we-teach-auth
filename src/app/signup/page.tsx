@@ -31,7 +31,7 @@ const SignupPage = () => {
             </Button>
           </form>
 
-          <Link href="/signup">Already have an account? Login</Link>
+          <Link href="/login">Already have an account? Login</Link>
         </CardFooter>
       </Card>
     </div>
